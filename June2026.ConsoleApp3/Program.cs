@@ -6,5 +6,6 @@ Console.WriteLine("Hello, World!");
 AdoDotNetService service = new AdoDotNetService();
 
 //service.ReadWithDataAdapter();
-service.ReadExecuteReader();
+//service.ReadExecuteReader();
+service.Create();
 

@@ -30,7 +30,6 @@ namespace June2026.ConsoleApp3
                   ,[FatherName]
                   ,[StudentNo]
                   ,[Email]
-                  ,[DateOfBirth]
                   ,[MobileNo]
                   ,[IsDelete]
               FROM [dbo].[Tbl_Student] WHERE IsDelete='0' ";
@@ -40,7 +39,8 @@ namespace June2026.ConsoleApp3
             //dataAdapter.Fill(dt);
             SqlDataReader reader = sqlCommand.ExecuteReader();
 
-            while (reader.Read()) {
+            while (reader.Read())
+            {
                 Console.WriteLine(reader["StudentName"]);
                 Console.WriteLine(reader["FatherName"]);
                 Console.WriteLine(reader["StudentNo"]);
@@ -70,8 +70,8 @@ namespace June2026.ConsoleApp3
 
 
         }
-        
-      
+
+
         public void ReadWithDataAdapter()
         {
             SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
@@ -90,7 +90,6 @@ namespace June2026.ConsoleApp3
                   ,[FatherName]
                   ,[StudentNo]
                   ,[Email]
-                  ,[DateOfBirth]
                   ,[MobileNo]
                   ,[IsDelete]
               FROM [dbo].[Tbl_Student] WHERE IsDelete='0' ";
@@ -107,7 +106,8 @@ namespace June2026.ConsoleApp3
             //DataColumn
             //DataRow
 
-            foreach (DataRow dr in dt.Rows) {
+            foreach (DataRow dr in dt.Rows)
+            {
                 Console.WriteLine(dr["StudentName"]);
                 Console.WriteLine(dr["FatherName"]);
                 Console.WriteLine(dr["StudentNo"]);
@@ -117,6 +117,73 @@ namespace June2026.ConsoleApp3
             }
             Console.WriteLine("Connection Closed.......");
         }
+
+
+        public void Create()
+        {
+            Console.Write("Enter Student Name: ");
+            string studentName = Console.ReadLine();
+
+            Console.Write("Enter Father Name: ");
+            string fatherName = Console.ReadLine();
+
+            Console.Write("Enter Student No: ");
+            string studentNo = Console.ReadLine();
+
+            Console.Write("Enter Email: ");
+            string email = Console.ReadLine();
+
+           // Console.Write("Enter Date of Birth (yyyy-MM-dd): ");
+           // string dateOfBirthInput = Console.ReadLine();
+
+            Console.Write("Enter Mobile No: ");
+            string mobileNo = Console.ReadLine();
+
+            Console.WriteLine("Inserting record into the database...");
+
+            SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
+            sb.DataSource = ".";
+            sb.InitialCatalog = "June2026Db";
+            sb.UserID = "sa";
+            sb.Password = "sasa@123";
+            sb.TrustServerCertificate = true;
+
+            SqlConnection connection = new SqlConnection(sb.ConnectionString);
+            connection.Open();
+            Console.WriteLine("Connection is openning .... ");
+            Console.WriteLine("Connection is opened .... ");
+            string query = @"INSERT INTO [dbo].[Tbl_Student]
+                           ([StudentName]
+                           ,[FatherName]
+                           ,[StudentNo]
+                           ,[Email]
+                           ,[MobileNo]
+                           ,[IsDelete])
+                     VALUES
+                           (@StudentName
+                           ,@FatherName
+                           ,@StudentNo
+                           ,@Email
+                           ,@MobileNo
+                           ,0)";
+            SqlCommand cmd = new SqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@StudentName", studentName);
+            cmd.Parameters.AddWithValue("@FatherName", fatherName);
+            cmd.Parameters.AddWithValue("@StudentNo", studentNo);
+            cmd.Parameters.AddWithValue("@Email",email);
+            cmd.Parameters.AddWithValue("@MobileNo",mobileNo);
+
+            int result = cmd.ExecuteNonQuery();
+
+            string message = result > 0 ? "Record Inserted Successfully" : "Record Not Inserted";
+
+            Console.WriteLine("Connection is closing ");
+            Console.WriteLine("Connection is closed ");
+            connection.Close();
+        }
+  
     
     }
-}
+
+
+};
