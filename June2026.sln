@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "June2026.ConsoleApp3", "Jun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "June2026.ConsoleApp4", "ConsoleApp4\June2026.ConsoleApp4.csproj", "{2E6B6C9E-AFD8-465A-A3CB-C85BB830AE92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "June2026.POSHomeWork", "2026June.POSHomeWork\June2026.POSHomeWork.csproj", "{96D6D428-86EB-40D9-878F-012037A6B504}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2E6B6C9E-AFD8-465A-A3CB-C85BB830AE92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E6B6C9E-AFD8-465A-A3CB-C85BB830AE92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E6B6C9E-AFD8-465A-A3CB-C85BB830AE92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96D6D428-86EB-40D9-878F-012037A6B504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96D6D428-86EB-40D9-878F-012037A6B504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96D6D428-86EB-40D9-878F-012037A6B504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96D6D428-86EB-40D9-878F-012037A6B504}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
