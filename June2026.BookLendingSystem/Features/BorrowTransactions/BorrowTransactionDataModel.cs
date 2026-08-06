@@ -1,6 +1,6 @@
 using System;
 
-namespace June2026.BookLendingSystem.ConsoleApp.Features.BorrowTransactions.Model
+namespace June2026.BookLendingSystem.ConsoleApp.Features.BorrowTransactions
 {
     public class BorrowTransactionDataModel
     {

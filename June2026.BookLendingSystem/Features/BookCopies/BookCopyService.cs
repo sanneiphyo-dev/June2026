@@ -1,5 +1,4 @@
 using Dapper;
-using June2026.BookLendingSystem.ConsoleApp.Features.BookCopies.Model;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;

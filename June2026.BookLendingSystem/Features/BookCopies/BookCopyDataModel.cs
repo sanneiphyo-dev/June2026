@@ -1,4 +1,4 @@
-namespace June2026.BookLendingSystem.ConsoleApp.Features.BookCopies.Model
+namespace June2026.BookLendingSystem.ConsoleApp.Features.BookCopies
 {
     public class BookCopyDataModel
     {

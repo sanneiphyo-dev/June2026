@@ -1,4 +1,3 @@
-using June2026.BookLendingSystem.ConsoleApp.Features.BookCopies.BookCopiesModel;
 using System;
 
 namespace June2026.BookLendingSystem.ConsoleApp.Features.BookCopies

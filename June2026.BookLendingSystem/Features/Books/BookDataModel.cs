@@ -1,6 +1,6 @@
 using System;
 
-namespace June2026.BookLendingSystem.ConsoleApp.Features.Books.Model
+namespace June2026.BookLendingSystem.ConsoleApp.Features.Books
 {
     public class BookDataModel
     {

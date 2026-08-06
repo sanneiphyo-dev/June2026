@@ -101,10 +101,84 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Shared
 
                 db.Execute(script);
                 Console.WriteLine("Database schema initialized successfully.");
+
+                SeedSampleData(db);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[Schema Init Info]: {ex.Message}");
+            }
+        }
+
+        private static void SeedSampleData(IDbConnection db)
+        {
+            try
+            {
+                // Check if Books table is empty, seed initial books
+                int bookCount = db.ExecuteScalar<int>("SELECT COUNT(*) FROM Books");
+                if (bookCount == 0)
+                {
+                    string seedBooks = @"
+                        INSERT INTO Books (title, author, publisher, category) VALUES 
+                        (N'C# 12 and .NET 8', N'Mark J. Price', N'Packt Publishing', N'Programming'),
+                        (N'Clean Architecture', N'Robert C. Martin', N'Prentice Hall', N'Software Engineering'),
+                        (N'Design Patterns', N'Erich Gamma et al.', N'Addison-Wesley', N'Computer Science');";
+                    db.Execute(seedBooks);
+                }
+
+                // Check if Members table is empty
+                int memberCount = db.ExecuteScalar<int>("SELECT COUNT(*) FROM Members");
+                if (memberCount == 0)
+                {
+                    string seedMembers = @"
+                        INSERT INTO Members (member_id, full_name, email, phone, role, status) VALUES 
+                        ('MEM-1001', N'John Doe', 'john.doe@example.com', '09123456789', 'Student', 'Active'),
+                        ('MEM-1002', N'Jane Smith', 'jane.smith@example.com', '09987654321', 'Teacher', 'Active');";
+                    db.Execute(seedMembers);
+                }
+
+                // Check if Book_Copies is empty
+                int copyCount = db.ExecuteScalar<int>("SELECT COUNT(*) FROM Book_Copies");
+                if (copyCount == 0)
+                {
+                    int firstBookId = db.ExecuteScalar<int>("SELECT TOP 1 book_id FROM Books");
+                    if (firstBookId > 0)
+                    {
+                        string seedCopies = $@"
+                            INSERT INTO Book_Copies (copy_id, book_id, book_copy_count) VALUES 
+                            ('CC-COPY-01', {firstBookId}, '1'),
+                            ('CC-COPY-02', {firstBookId}, '2');";
+                        db.Execute(seedCopies);
+                    }
+                }
+
+                // Check if Borrow_Transactions is empty
+                int txnCount = db.ExecuteScalar<int>("SELECT COUNT(*) FROM Borrow_Transactions");
+                if (txnCount == 0)
+                {
+                    string seedTxn = @"
+                        INSERT INTO Borrow_Transactions (transaction_id, member_id, copy_id, borrow_date, due_date, status) VALUES 
+                        ('TXN-2026-0001', 'MEM-1001', 'CC-COPY-01', GETDATE(), DATEADD(day, 14, GETDATE()), 'Borrowed');";
+                    db.Execute(seedTxn);
+                }
+
+                // Check if Reservation is empty
+                int resCount = db.ExecuteScalar<int>("SELECT COUNT(*) FROM Reservation");
+                if (resCount == 0)
+                {
+                    int firstBookId = db.ExecuteScalar<int>("SELECT TOP 1 book_id FROM Books");
+                    if (firstBookId > 0)
+                    {
+                        string seedRes = $@"
+                            INSERT INTO Reservation (book_id, member_id, reserved_at, status) VALUES 
+                            ({firstBookId}, 'MEM-1002', GETDATE(), 'Pending');";
+                        db.Execute(seedRes);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Seed Info]: {ex.Message}");
             }
         }
     }
