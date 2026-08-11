@@ -12,9 +12,8 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Books
         public string Author { get; set; } = string.Empty;
         public string? Publisher { get; set; }
         public string? Category { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Browsable(false)]
-        public string DisplayText => $"Title: {Title} | Author: {Author} | Publisher: {Publisher ?? "N/A"} | Category: {Category ?? "N/A"}";
+        public string DisplayText => $"Book Title: {Title} | Author: {Author}  | Category: {Category ?? "N/A"}";
     }
 }

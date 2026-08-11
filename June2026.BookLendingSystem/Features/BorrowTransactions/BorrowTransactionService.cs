@@ -35,7 +35,8 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BorrowTransactions
                      FROM [dbo].[Borrow_Transactions] bt
                      LEFT JOIN [dbo].[Members] m ON bt.[member_id] = m.[member_id]
                      LEFT JOIN [dbo].[Book_Copies] bc ON bt.[copy_id] = bc.[copy_id]
-                     LEFT JOIN [dbo].[Books] b ON bc.[book_id] = b.[book_id]";
+                     LEFT JOIN [dbo].[Books] b ON bc.[book_id] = b.[book_id]
+                     WHERE bt.[del_flg] = 0";
 
             var dataModels = db.Query<BorrowTransactionDataModel>(query).ToList();
 
@@ -76,7 +77,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BorrowTransactions
                      LEFT JOIN [dbo].[Members] m ON bt.[member_id] = m.[member_id]
                      LEFT JOIN [dbo].[Book_Copies] bc ON bt.[copy_id] = bc.[copy_id]
                      LEFT JOIN [dbo].[Books] b ON bc.[book_id] = b.[book_id]
-                     WHERE bt.[transaction_id] = @TransactionId";
+                     WHERE bt.[transaction_id] = @TransactionId AND bt.[del_flg] = 0";
 
             var d = db.QueryFirstOrDefault<BorrowTransactionDataModel>(query, new { TransactionId = transactionId });
             if (d == null) return null;
@@ -164,11 +165,21 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BorrowTransactions
         {
             using IDbConnection db = new SqlConnection(sb.ConnectionString);
 
-            string query = @"DELETE FROM [dbo].[Borrow_Transactions] WHERE [transaction_id] = @TransactionId";
+            string query = @"UPDATE [dbo].[Borrow_Transactions] SET [del_flg] = 1 WHERE [transaction_id] = @TransactionId";
 
             var res = db.Execute(query, new { TransactionId = transactionId });
 
             Console.WriteLine(res > 0 ? "Deleting Borrow Transaction Successfully" : "Fail To Delete Transaction");
+        }
+
+        public string? GetCopyIdByBookTitle(string bookTitle)
+        {
+            using IDbConnection db = new SqlConnection(sb.ConnectionString);
+            string query = @"SELECT TOP 1 bc.[copy_id]
+                             FROM [dbo].[Book_Copies] bc
+                             INNER JOIN [dbo].[Books] b ON bc.[book_id] = b.[book_id]
+                             WHERE b.[title] = @BookTitle";
+            return db.QueryFirstOrDefault<string>(query, new { BookTitle = bookTitle });
         }
     }
 }

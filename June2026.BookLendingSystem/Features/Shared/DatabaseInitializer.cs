@@ -43,7 +43,8 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Shared
                         author NVARCHAR(255) NOT NULL,
                         publisher NVARCHAR(255) NULL,
                         category NVARCHAR(100) NULL,
-                        created_at DATETIME2 DEFAULT GETDATE()
+                        created_at DATETIME2 DEFAULT GETDATE(),
+                        del_flg BIT NOT NULL DEFAULT 0
                     );
                 END
 
@@ -53,6 +54,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Shared
                         copy_id VARCHAR(50) PRIMARY KEY,
                         book_id INT NOT NULL,
                         book_copy_count VARCHAR(50) NOT NULL,
+                        del_flg BIT NOT NULL DEFAULT 0,
                         FOREIGN KEY (book_id) REFERENCES Books(book_id) ON DELETE CASCADE
                     );
                 END
@@ -66,7 +68,8 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Shared
                         phone VARCHAR(20) NULL,
                         role VARCHAR(20) NOT NULL,
                         status VARCHAR(20) NOT NULL,
-                        created_at DATETIME2 DEFAULT GETDATE()
+                        created_at DATETIME2 DEFAULT GETDATE(),
+                        del_flg BIT NOT NULL DEFAULT 0
                     );
                 END
 
@@ -81,6 +84,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Shared
                         return_date DATETIME2 NULL,
                         fine_amount DECIMAL(10, 2) DEFAULT 0.00 NOT NULL,
                         status VARCHAR(20) NOT NULL,
+                        del_flg BIT NOT NULL DEFAULT 0,
                         FOREIGN KEY (member_id) REFERENCES Members(member_id),
                         FOREIGN KEY (copy_id) REFERENCES Book_Copies(copy_id)
                     );
@@ -94,12 +98,38 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Shared
                         member_id VARCHAR(50) NOT NULL,
                         reserved_at DATETIME2 DEFAULT GETDATE() NOT NULL,
                         status VARCHAR(20) NOT NULL,
+                        del_flg BIT NOT NULL DEFAULT 0,
                         FOREIGN KEY (book_id) REFERENCES Books(book_id),
                         FOREIGN KEY (member_id) REFERENCES Members(member_id)
                     );
                 END";
 
                 db.Execute(script);
+
+                // Run column existence migrations
+                string migrationSql = @"
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Books') AND name = 'del_flg')
+                BEGIN
+                    ALTER TABLE Books ADD del_flg BIT NOT NULL DEFAULT 0;
+                END
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Book_Copies') AND name = 'del_flg')
+                BEGIN
+                    ALTER TABLE Book_Copies ADD del_flg BIT NOT NULL DEFAULT 0;
+                END
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Members') AND name = 'del_flg')
+                BEGIN
+                    ALTER TABLE Members ADD del_flg BIT NOT NULL DEFAULT 0;
+                END
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Borrow_Transactions') AND name = 'del_flg')
+                BEGIN
+                    ALTER TABLE Borrow_Transactions ADD del_flg BIT NOT NULL DEFAULT 0;
+                END
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Reservation') AND name = 'del_flg')
+                BEGIN
+                    ALTER TABLE Reservation ADD del_flg BIT NOT NULL DEFAULT 0;
+                END";
+                db.Execute(migrationSql);
+
                 Console.WriteLine("Database schema initialized successfully.");
 
                 SeedSampleData(db);

@@ -25,13 +25,13 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Reservations
             string query = @"SELECT r.[reservation_id]
                            ,r.[book_id]
                            ,r.[member_id]
-                           ,r.[reserved_at]
                            ,r.[status]
                            ,b.[title]
                            ,m.[full_name]
                      FROM [dbo].[Reservation] r
                      LEFT JOIN [dbo].[Books] b ON r.[book_id] = b.[book_id]
-                     LEFT JOIN [dbo].[Members] m ON r.[member_id] = m.[member_id]";
+                     LEFT JOIN [dbo].[Members] m ON r.[member_id] = m.[member_id]
+                     WHERE r.[del_flg] = 0";
 
             var dataModels = db.Query<ReservationDataModel>(query).ToList();
 
@@ -40,7 +40,6 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Reservations
                 ReservationId = d.reservation_id,
                 BookId = d.book_id,
                 MemberId = d.member_id,
-                ReservedAt = d.reserved_at,
                 Status = d.status,
                 BookTitle = d.title,
                 MemberName = d.full_name
@@ -58,14 +57,13 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Reservations
             string query = @"SELECT r.[reservation_id]
                            ,r.[book_id]
                            ,r.[member_id]
-                           ,r.[reserved_at]
                            ,r.[status]
                            ,b.[title]
                            ,m.[full_name]
                      FROM [dbo].[Reservation] r
                      LEFT JOIN [dbo].[Books] b ON r.[book_id] = b.[book_id]
                      LEFT JOIN [dbo].[Members] m ON r.[member_id] = m.[member_id]
-                     WHERE r.[reservation_id] = @ReservationId";
+                     WHERE r.[reservation_id] = @ReservationId AND r.[del_flg] = 0";
 
             var d = db.QueryFirstOrDefault<ReservationDataModel>(query, new { ReservationId = reservationId });
             if (d == null) return null;
@@ -75,7 +73,6 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Reservations
                 ReservationId = d.reservation_id,
                 BookId = d.book_id,
                 MemberId = d.member_id,
-                ReservedAt = d.reserved_at,
                 Status = d.status,
                 BookTitle = d.title,
                 MemberName = d.full_name
@@ -132,7 +129,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Reservations
         {
             using IDbConnection db = new SqlConnection(sb.ConnectionString);
 
-            string query = @"DELETE FROM [dbo].[Reservation] WHERE [reservation_id] = @ReservationId";
+            string query = @"UPDATE [dbo].[Reservation] SET [del_flg] = 1 WHERE [reservation_id] = @ReservationId";
 
             var res = db.Execute(query, new { ReservationId = reservationId });
 

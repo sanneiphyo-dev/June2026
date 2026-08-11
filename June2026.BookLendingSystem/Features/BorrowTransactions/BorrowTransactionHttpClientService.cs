@@ -95,5 +95,23 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BorrowTransactions
             _directService.Delete(transactionId);
             return true;
         }
+
+        public async Task<string?> GetCopyIdByBookTitleAsync(string bookTitle)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/borrowtransactions/copy-by-title?title={Uri.EscapeDataString(bookTitle)}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[HttpClient Fallback to Direct DB]: {ex.Message}");
+            }
+
+            return _directService.GetCopyIdByBookTitle(bookTitle);
+        }
     }
 }

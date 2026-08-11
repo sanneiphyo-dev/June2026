@@ -29,7 +29,8 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Books
                            ,[publisher]
                            ,[category]
                            ,[created_at]
-                     FROM [dbo].[Books]";
+                     FROM [dbo].[Books]
+                     WHERE [del_flg] = 0";
 
             var dataModels = db.Query<BookDataModel>(query).ToList();
 
@@ -39,8 +40,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Books
                 Title = d.title,
                 Author = d.author,
                 Publisher = d.publisher,
-                Category = d.category,
-                CreatedAt = d.created_at
+                Category = d.category
             }).ToList();
 
             Console.WriteLine(viewModels.Any() ? "Fetching book list successfully." : "No active books found.");
@@ -59,7 +59,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Books
                            ,[category]
                            ,[created_at]
                      FROM [dbo].[Books]
-                     WHERE [book_id] = @BookId";
+                     WHERE [book_id] = @BookId AND [del_flg] = 0";
 
             var d = db.QueryFirstOrDefault<BookDataModel>(query, new { BookId = bookId });
             if (d == null) return null;
@@ -70,8 +70,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Books
                 Title = d.title,
                 Author = d.author,
                 Publisher = d.publisher,
-                Category = d.category,
-                CreatedAt = d.created_at
+                Category = d.category
             };
         }
         #endregion
@@ -136,7 +135,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Books
         {
             using IDbConnection db = new SqlConnection(sb.ConnectionString);
 
-            string query = @"DELETE FROM [dbo].[Books] WHERE [book_id] = @BookId";
+            string query = @"UPDATE [dbo].[Books] SET [del_flg] = 1 WHERE [book_id] = @BookId";
 
             var res = db.Execute(query, new { BookId = bookId });
 

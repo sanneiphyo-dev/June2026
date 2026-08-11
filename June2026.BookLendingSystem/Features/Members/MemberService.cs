@@ -29,7 +29,8 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Members
                            ,[role]
                            ,[status]
                            ,[created_at]
-                     FROM [dbo].[Members]";
+                     FROM [dbo].[Members]
+                     WHERE [del_flg] = 0";
 
             var dataModels = db.Query<MemberDataModel>(query).ToList();
 
@@ -41,7 +42,6 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Members
                 Phone = d.phone,
                 Role = d.role,
                 Status = d.status,
-                CreatedAt = d.created_at
             }).ToList();
 
             Console.WriteLine(viewModels.Any() ? "Fetching member list successfully." : "No members found.");
@@ -61,7 +61,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Members
                            ,[status]
                            ,[created_at]
                      FROM [dbo].[Members]
-                     WHERE [member_id] = @MemberId";
+                     WHERE [member_id] = @MemberId AND [del_flg] = 0";
 
             var d = db.QueryFirstOrDefault<MemberDataModel>(query, new { MemberId = memberId });
             if (d == null) return null;
@@ -74,7 +74,6 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Members
                 Phone = d.phone,
                 Role = d.role,
                 Status = d.status,
-                CreatedAt = d.created_at
             };
         }
 
@@ -141,7 +140,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Members
         {
             using IDbConnection db = new SqlConnection(sb.ConnectionString);
 
-            string query = @"DELETE FROM [dbo].[Members] WHERE [member_id] = @MemberId";
+            string query = @"UPDATE [dbo].[Members] SET [del_flg] = 1 WHERE [member_id] = @MemberId";
 
             var res = db.Execute(query, new { MemberId = memberId });
 

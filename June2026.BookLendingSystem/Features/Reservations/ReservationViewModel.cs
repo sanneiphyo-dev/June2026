@@ -16,10 +16,10 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.Reservations
 
         public string? BookTitle { get; set; }
         public string? MemberName { get; set; }
-        public DateTime ReservedAt { get; set; } = DateTime.Now;
-        public string Status { get; set; } = "Pending";
+
+        public string Status { get; set; } 
 
         [Browsable(false)]
-        public string DisplayText => $"Book: {BookTitle ?? "N/A"} | Member: {MemberName ?? "N/A"} | Reserved At: {ReservedAt:yyyy-MM-dd HH:mm} | Status: {Status}";
+        public string DisplayText => $"Book Title: {BookTitle ?? "N/A"} | Member: {MemberName ?? "N/A"} | Status: {Status}";
     }
 }

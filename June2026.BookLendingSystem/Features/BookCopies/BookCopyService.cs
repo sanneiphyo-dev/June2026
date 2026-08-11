@@ -27,7 +27,8 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BookCopies
                            ,bc.[book_copy_count]
                            ,b.[title]
                      FROM [dbo].[Book_Copies] bc
-                     LEFT JOIN [dbo].[Books] b ON bc.[book_id] = b.[book_id]";
+                     LEFT JOIN [dbo].[Books] b ON bc.[book_id] = b.[book_id]
+                     WHERE bc.[del_flg] = 0";
 
             var dataModels = db.Query<BookCopyDataModel>(query).ToList();
 
@@ -54,7 +55,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BookCopies
                            ,b.[title]
                      FROM [dbo].[Book_Copies] bc
                      LEFT JOIN [dbo].[Books] b ON bc.[book_id] = b.[book_id]
-                     WHERE bc.[copy_id] = @CopyId";
+                     WHERE bc.[copy_id] = @CopyId AND bc.[del_flg] = 0";
 
             var d = db.QueryFirstOrDefault<BookCopyDataModel>(query, new { CopyId = copyId });
             if (d == null) return null;
@@ -114,7 +115,7 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BookCopies
         {
             using IDbConnection db = new SqlConnection(sb.ConnectionString);
 
-            string query = @"DELETE FROM [dbo].[Book_Copies] WHERE [copy_id] = @CopyId";
+            string query = @"UPDATE [dbo].[Book_Copies] SET [del_flg] = 1 WHERE [copy_id] = @CopyId";
 
             var res = db.Execute(query, new { CopyId = copyId });
 

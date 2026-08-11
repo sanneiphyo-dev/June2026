@@ -14,6 +14,6 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BookCopies
         public string BookCopyCount { get; set; } = string.Empty;
 
         [Browsable(false)]
-        public string DisplayText => $"Book: {BookTitle ?? "N/A"} | Count: {BookCopyCount}";
+        public string DisplayText => $"Book Title: {BookTitle ?? "N/A"} | Count: {BookCopyCount}";
     }
 }
