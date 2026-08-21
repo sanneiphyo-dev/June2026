@@ -113,5 +113,25 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BorrowTransactions
 
             return _directService.GetCopyIdByBookTitle(bookTitle);
         }
+
+        public async Task<int> GetTotalCopiesByBookTitleAsync(string bookTitle)
+        {
+            return _directService.GetTotalCopiesByBookTitle(bookTitle);
+        }
+
+        public async Task<int> GetAvailableCopiesByBookTitleAsync(string bookTitle)
+        {
+            return _directService.GetAvailableCopiesByBookTitle(bookTitle);
+        }
+
+        public async Task<int?> GetBookIdByBookTitleAsync(string bookTitle)
+        {
+            return _directService.GetBookIdByBookTitle(bookTitle);
+        }
+
+        public async Task<bool> CheckMemberExistsAsync(string memberId)
+        {
+            return _directService.CheckMemberExists(memberId);
+        }
     }
 }

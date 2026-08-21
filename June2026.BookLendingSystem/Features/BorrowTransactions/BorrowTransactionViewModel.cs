@@ -15,7 +15,6 @@ namespace June2026.BookLendingSystem.ConsoleApp.Features.BorrowTransactions
 
         public string? MemberName { get; set; }
 
-        [Browsable(false)]
         public string? BookTitle { get; set; }
 
         public DateTime BorrowDate { get; set; } = DateTime.Now;
